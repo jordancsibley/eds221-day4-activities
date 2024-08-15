@@ -1,0 +1,116 @@
+---
+title: "Day 4 EOD Activity"
+author: "Jordan"
+format: html
+---
+
+```{r}
+# load in packages 
+library(tidyverse)
+```
+
+
+# Task 1 
+```{r}
+weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+
+transects <- c("Transect A", "Transect B", "Transect C")
+```
+
+
+```{r}
+# Create a nested for loop that connects each day of the week to a transect 
+
+out_matrix <- matrix(nrow = length(weekdays), ncol = length(transects))
+
+for (i in 1:length(weekdays)) {
+  for (j in 1:length(transects)) {
+    out_matrix[i, j] <- (paste(weekdays[i], "-", transects[j]))
+  }
+}
+```
+
+
+# Task 2 
+```{r}
+# create func 'force' that calcs a force ( in newtons) given inputs of mass (kg) and acceleration (m/s2) 
+# F = ma 
+# and returns a statement "The resulting force is --- Newtons" 
+
+force <- function(m, a) {
+  f <- m * a 
+  print(paste("The resulting force is", f, "Newtons"))
+}
+
+force(m = 10, a = 15)
+```
+
+
+# Task 3 
+```{r}
+# length to weight relationship for fish is w = a * (l^b)
+#l = total fish length (cm)
+# w = expected weight (g)
+# a and b are species dependent parameters 
+
+# create the data frame 
+fish_parms <- data.frame(sci_name = c("Chanos chanos",
+                                      "Sphyraena barracuda",
+                                      "Caranx ignobilis"),
+                         common_name = c("Milkfish",
+                                        "Great barracuda",
+                                        "	Giant trevally"),
+                         a_est = c(0.0905,
+                                   0.0181,
+                                   0.0353),
+                         b_est = c(2.52, 
+                                   3.27,
+                                   3.05))
+```
+
+```{r}
+# write a function 'fish_weight' that allows a user to only enter the common name and total length 'tot_length' of a fish to return the expected fish weight in grams 
+
+#w = a * (l^b)
+
+fish_weight <- function(fish_name, tot_length) {
+  my_sub <- fish_parms %>% 
+  filter(common_name == fish_name)
+  weight <- my_sub$a_est * tot_length * exp(my_sub$b_est)
+  return(weight)
+}
+
+fish_weight("Milkfish", 40) # 44.99152
+```
+
+
+```{r}
+# vectors of lengths 0 to 100 by 1 ensuring that your function will calc the fish weight over a range of lengths for the given species (milkfish), storing the output weights as milkfish_weights 
+
+# vectors look fine 
+
+vec_length <- seq(from = 0, to = 100, by = 1)
+
+#milkfish_weights <- vector(mode = "numeric", length = length(vec_length))
+
+milkfish_weights <- fish_weight("Milkfish", vec_length)
+
+```
+
+
+# Task 4 
+```{r}
+t_vec <- seq(from = 1, to = 8, by = 1)
+h_vec <- seq(from = 0, to = 3, by = 0.2)
+
+wave_power <- function(height, time) {
+  power <- 0.5 * (height ^ 2) * time
+  print(power)
+}
+
+wave_power(height = 10, time = 10)
+
+wave_power(h_vec, t_vec)
+```
+
+
